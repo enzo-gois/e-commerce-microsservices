@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsup src/server.ts --format cjs,esm --dts"
+    "build": "tsup src/server.ts --format cjs,esm --dts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/db/migrate.ts"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +25,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.19.19",
     "@types/pg": "^8.20.0",
+    "drizzle-kit": "^0.31.10",
     "tsup": "^8.5.1",
     "tsx": "^4.22.2",
     "typescript": "^5.9.2"
