@@ -13,6 +13,19 @@ services:
     volumes:
       - pgdata_auth:/var/lib/postgresql/data
 
+  postgres-catalog:
+    image: pgvector/pgvector:pg16
+    container_name: postgres-catalog
+    restart: always
+    environment:
+      - POSTGRES_USER: catalog_user
+      - POSTGRES_PASSWORD: catalog_password
+      - POSTGRES_DB: catalog_db
+    ports:
+      - '5433:5432'
+    volumes:
+      - catalog_data:/var/lib/postgresql/data
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: eco-rabbitmq
@@ -25,3 +38,4 @@ services:
 
 volumes:
   pgdata_auth:
+  catalog_data:
