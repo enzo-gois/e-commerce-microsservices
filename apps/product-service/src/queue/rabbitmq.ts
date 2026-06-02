@@ -20,10 +20,25 @@ class RabbitMQClient {
       throw new Error('Canal do RabbitMQ não está inicializado!');
     }
 
-    await this.channel.assertQueue(queue, { durable: true });
+    const dlxName = `${queue}.dlx`;
+    const dlqName = `${queue}.dlq`;
 
+    await this.channel.assertExchange(dlxName, 'direct', { durable: true });
+
+    await this.channel.assertQueue(dlqName, { durable: true });
+
+    await this.channel.bindQueue(dlqName, dlxName, '');
+
+    await this.channel.assertQueue(queue, {
+      durable: true,
+      arguments: {
+        'x-dead-letter-exchange': dlxName,
+        'x-dead-letter-routing-key': '',
+      },
+    });
+
+    // Converte a mensagem e publica na fila principal
     const content = Buffer.from(JSON.stringify(message));
-
     this.channel.sendToQueue(queue, content);
   }
 }
